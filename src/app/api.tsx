@@ -1,3 +1,4 @@
+/*
 import axios, { AxiosRequestConfig } from "axios";
 
 const axiosInstance = axios.create({
@@ -20,4 +21,4 @@ export async function fetchData<ResultType>(
         console.error('Error retrieving data:', error);
         throw new Error('Could not get data');
     }
-};
+};*/

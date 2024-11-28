@@ -1,10 +1,22 @@
 "use client"
 import Link from "next/link";
-import { useState } from "react";
+import {useState} from "react";
+import {useRouter} from 'next/navigation'
+
+interface FormData {
+    username: string | undefined,
+    password: string | undefined,
+}
 
 export default function Login() {
 
-    const [formData, setFormData] = useState({});
+    const [formData, setFormData] = useState<FormData>({
+        password: undefined,
+        username: undefined
+    });
+
+    const tokenFetchingUrl: string = '/api/squiz/v1/auth/generateToken';
+    const router = useRouter();
 
     const handleInputChange = (
         event: React.ChangeEvent<HTMLInputElement>
@@ -15,13 +27,35 @@ export default function Login() {
         });
     }
 
+    const handleSubmit = async () => {
+        const userName: string | undefined = formData["username"];
+        const password: string | undefined = formData["password"];
+
+        const response: Response = await fetch(tokenFetchingUrl, {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({userName: userName, userPassword: password}),
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        sessionStorage.setItem('authToken', data?.token);
+        router.push('/dashboard');
+    }
+
     return (
         <div className="bg-gray-200 flex items-center justify-center min-h-screen">
             <div className="w-full max-w-md p-6 bg-white rounded-lg shadow-md">
                 <h2 className="text-gray-500 text-4xl font-bold mb-6">Login</h2>
                 <form>
                     <div className="mb-4">
-                        <label htmlFor="username" className="block text-gray-600 text-sm font-medium mb-2">Username</label>
+                        <label htmlFor="username"
+                               className="block text-gray-600 text-sm font-medium mb-2">Username</label>
                         <input
                             type="text"
                             id="username"
@@ -33,7 +67,8 @@ export default function Login() {
                         />
                     </div>
                     <div className="mb-6">
-                        <label htmlFor="password" className="block text-gray-600 text-sm font-medium mb-2">Password</label>
+                        <label htmlFor="password"
+                               className="block text-gray-600 text-sm font-medium mb-2">Password</label>
                         <input
                             type="password"
                             id="password"
@@ -49,13 +84,14 @@ export default function Login() {
                     <button
                         type="submit"
                         className="block py-2 px-4 bg-blue-500 text-white font-bold rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        onClick={handleSubmit}
                     >
                         Login
                     </button>
                 </div>
                 <div className="mt-4 text-center">
                     <Link className="text-gray-500 text-sm hover:underline"
-                        href="/">
+                          href="/">
                         Back to Home
                     </Link>
                 </div>

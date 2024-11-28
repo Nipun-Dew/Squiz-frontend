@@ -1,4 +1,14 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
 
-export default nextConfig;
+
+// proxy setup for different origins of server and frontend
+export default {
+    async rewrites() {
+        return [
+            {
+                source: '/api/:path*', // Proxy requests starting with /api
+                destination: 'http://localhost:8080/api/:path*', // Redirect to the backend
+            },
+        ];
+    },
+};
