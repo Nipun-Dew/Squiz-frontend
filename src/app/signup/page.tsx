@@ -5,17 +5,22 @@ import {useRouter} from 'next/navigation'
 
 interface FormData {
     username: string | undefined,
+    userEmail: string | undefined,
     password: string | undefined,
+    role: string | undefined,
 }
 
-export default function Login() {
+export default function Signup() {
 
     const [formData, setFormData] = useState<FormData>({
+        username: undefined,
+        userEmail: undefined,
         password: undefined,
-        username: undefined
+        role: undefined
     });
 
-    const tokenFetchingUrl: string = '/api/squiz/v1/auth/generateToken';
+    const addNewUserUrl: string = '/api/squiz/v1/auth/addNewUser';
+    const defaultRole: string = 'Test';
     const router = useRouter();
 
     const handleInputChange = (
@@ -30,29 +35,33 @@ export default function Login() {
     const handleSubmit = async () => {
         const userName: string | undefined = formData["username"];
         const password: string | undefined = formData["password"];
+        const userEmail: string | undefined = formData["userEmail"];
+        const role: string | undefined = defaultRole;
 
-        const response: Response = await fetch(tokenFetchingUrl, {
+        const response: Response = await fetch(addNewUserUrl, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({userName: userName, userPassword: password}),
+            body: JSON.stringify({userName: userName,
+                userEmail: userEmail,
+                userPassword: password,
+                role: role,
+            }),
         });
 
         // TODO add proper error handling logic
         if (!response.ok) {
-            window.alert('Login failed!');
+            window.alert('Sign up failed!');
         }
 
-        const data = await response.json();
-        sessionStorage.setItem('authToken', data?.token);
-        router.push('/quizzes');
+        router.push('/login');
     }
 
     return (
         <div className="bg-gray-200 flex items-center justify-center min-h-screen">
             <div className="w-full max-w-md p-6 bg-white rounded-lg shadow-md">
-                <h2 className="text-gray-500 text-4xl font-bold mb-6">Login</h2>
+                <h2 className="text-gray-500 text-4xl font-bold mb-6">Sign Up</h2>
                 <form>
                     <div className="mb-4">
                         <label htmlFor="username"
@@ -63,6 +72,19 @@ export default function Login() {
                             name="username"
                             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                             placeholder="Enter your username"
+                            required
+                            onChange={(event) => handleInputChange(event)}
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <label htmlFor="userEmail"
+                               className="block text-gray-600 text-sm font-medium mb-2">User Email</label>
+                        <input
+                            type="text"
+                            id="userEmail"
+                            name="userEmail"
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="Enter your user email"
                             required
                             onChange={(event) => handleInputChange(event)}
                         />
@@ -87,7 +109,7 @@ export default function Login() {
                         className="block py-2 px-4 bg-blue-500 text-white font-bold rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         onClick={handleSubmit}
                     >
-                        Login
+                        Sign Up
                     </button>
                 </div>
                 <div className="mt-4 text-center">
