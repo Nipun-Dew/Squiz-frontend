@@ -20,7 +20,7 @@ export default function Signup() {
     });
 
     const addNewUserUrl: string = '/api/squiz/v1/auth/addNewUser';
-    const defaultRole: string = 'Test';
+    const defaultRole: string = 'USER';
     const router = useRouter();
 
     const handleInputChange = (
