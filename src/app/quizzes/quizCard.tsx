@@ -1,3 +1,5 @@
+import { useRouter } from 'next/navigation';
+
 interface QuizCardProps {
     id: string;
     title: string;
@@ -5,10 +7,15 @@ interface QuizCardProps {
 }
 
 const QuizCard: React.FC<QuizCardProps> = ({id, title, description}) => {
+    const router = useRouter();
+    const navigateToDynamicRoute = () => {
+        router.push(`quizzes/${id.toString()}`);
+    };
+
     return (
         <div
             className="bg-white rounded-lg shadow-md hover:shadow-lg p-4 cursor-pointer transition duration-300 w-[500px]"
-            // onClick={onClick}
+            onClick={() => navigateToDynamicRoute()}
         >
             <div className="p-4">
                 <h2 className="text-lg font-semibold text-gray-800">{"Quiz no: " + id}</h2>

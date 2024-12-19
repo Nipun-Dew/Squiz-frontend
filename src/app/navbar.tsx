@@ -5,7 +5,7 @@ export default function Navbar() {
         <nav className="bg-blue-600 text-white shadow">
             <div className="container mx-auto px-4 py-4 flex items-center">
                 {/* Logo */}
-                <a href="#" className="text-xl font-bold flex-shrink-0">MyWebsite</a>
+                <a href="#" className="text-xl font-bold flex-shrink-0">Squiz App</a>
 
                 {/* Navigation Links */}
                 <ul className="flex space-x-14 justify-center flex-grow">
