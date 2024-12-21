@@ -3,7 +3,7 @@ import Navbar from "@/app/navbar";
 import QuizCard from "@/app/quizzes/quizCard";
 import {useEffect, useState} from "react";
 
-interface QuizData {
+interface QuizzesData {
     id: number,
     creatorId: string,
     title: string,
@@ -15,7 +15,7 @@ interface QuizData {
 }
 
 export default function Quizzes() {
-    const [data, setData] = useState<QuizData[] | null>(null);
+    const [data, setData] = useState<QuizzesData[] | null>(null);
 
     const quizDataUrl = "/api/squiz/v1/quizzes"
 
@@ -31,7 +31,7 @@ export default function Quizzes() {
         if (!response.ok) {
             window.alert('Failed to load quizzes!');
         }
-        const result: QuizData[] = await response.json();
+        const result: QuizzesData[] = await response.json();
         return result;
     }
 
