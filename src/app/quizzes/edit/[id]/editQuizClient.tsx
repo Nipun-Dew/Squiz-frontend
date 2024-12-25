@@ -1,6 +1,7 @@
 "use client"
 import React, {useEffect, useState} from "react";
 import Navbar from "@/app/navbar";
+import startAutoLogout from "@/app/login/logout";
 
 interface Question {
     quizId: string,
@@ -54,6 +55,9 @@ export default function EditQuizClient({id}: { id: string }) {
     const [question, setQuestion] = useState<Question>(defaultQuestion);
     const [options, setOptions] = useState<Option[]>(defaultOptions);
     const [savedQuestions, setSavedQuestions] = useState<QuestionInfo[]>([]);
+
+    const token = window.sessionStorage.getItem("authToken") || "";
+    startAutoLogout(token);
 
     const handleQuestionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = question;
@@ -114,7 +118,6 @@ export default function EditQuizClient({id}: { id: string }) {
     }
 
     const postQuestion = async (question: Question, options: Option[]) => {
-        const token = window.sessionStorage.getItem("authToken");
         const postQuizUrl = `/api/squiz/v1/question`
 
         const response = await fetch(postQuizUrl, {

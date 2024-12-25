@@ -3,6 +3,7 @@ import Navbar from "@/app/navbar";
 import QuizCard from "@/app/quizzes/quizCard";
 import {useEffect, useState} from "react";
 import {useRouter} from "next/navigation";
+import startAutoLogout from "@/app/login/logout";
 
 interface QuizzesData {
     id: number,
@@ -19,10 +20,11 @@ export default function Quizzes() {
     const [data, setData] = useState<QuizzesData[] | null>(null);
     const router = useRouter();
     const quizDataUrl = "/api/squiz/v1/quizzes"
+    const token = sessionStorage.getItem("authToken") || "";
+
+    startAutoLogout(token);
 
     const fetchData = async () => {
-        const token = sessionStorage.getItem("authToken");
-
         const headers = {
             Authorization: token ? `Bearer ${token}` : "",
         };

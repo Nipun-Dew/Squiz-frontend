@@ -4,6 +4,7 @@ import React, {useState} from "react";
 import Navbar from "@/app/navbar";
 import decodeToken from "@/utils/decodeToken";
 import {useRouter} from "next/navigation";
+import startAutoLogout from "@/app/login/logout";
 
 interface QuizProps {
     creatorId: string,
@@ -22,6 +23,9 @@ export default function AddQuiz() {
 
     const router = useRouter();
 
+    const token = window.sessionStorage.getItem("authToken") || "";
+    startAutoLogout(token);
+
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         const token: string = sessionStorage.getItem("authToken") || "";
@@ -37,7 +41,6 @@ export default function AddQuiz() {
     };
 
     const postQuiz = async (data: QuizProps) => {
-        const token = window.sessionStorage.getItem("authToken");
         const postQuizUrl = `/api/squiz/v1/quiz`
 
         const response = await fetch(postQuizUrl, {

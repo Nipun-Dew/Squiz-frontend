@@ -1,6 +1,7 @@
 "use client"
 import Navbar from "../../navbar";
 import {useEffect, useState} from "react";
+import startAutoLogout from "@/app/login/logout";
 
 interface Quiz {
     id: number,
@@ -48,9 +49,11 @@ interface QuizData {
 export default function QuizClient({id}: { id: string }) {
     const [data, setData] = useState<QuizData | null>(null);
 
+    const token = window.sessionStorage.getItem("authToken") || "";
+    startAutoLogout(token);
+
     useEffect(() => {
         const fetchData = async () => {
-            const token = window.sessionStorage.getItem("authToken");
             const headers = {Authorization: token ? `Bearer ${token}` : ""};
             const quizDataUrl = `/api/squiz/v1/quiz/${id}`
 
