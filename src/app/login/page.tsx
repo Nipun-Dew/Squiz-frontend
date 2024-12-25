@@ -1,7 +1,8 @@
 "use client"
 import Link from "next/link";
 import {useState} from "react";
-import {useRouter} from 'next/navigation'
+import {useRouter} from "next/navigation";
+import startAutoLogout from "./logout"
 
 interface FormData {
     username: string | undefined,
@@ -46,6 +47,8 @@ export default function Login() {
 
         const data = await response.json();
         sessionStorage.setItem('authToken', data?.token);
+        startAutoLogout(data?.token);
+
         router.push('/quizzes');
     }
 

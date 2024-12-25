@@ -1,9 +1,9 @@
-import QuizClient from "./QuizClient";
+import QuizClient from "./quizClient";
 
 export default async function Quiz({params}: {
     params: { id: string }
 }) {
-    const id: string = params.id
+    const { id } = await params
 
     return (
         <div className="min-h-screen flex flex-col bg-gray-200">

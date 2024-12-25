@@ -1,6 +1,6 @@
 import React from "react";
 
-import EditQuizClient from "@/app/quizzes/edit/[id]/EditQuizClient";
+import EditQuizClient from "@/app/quizzes/edit/[id]/editQuizClient";
 
 export default async function EditQuiz({params}: {
     params: { id: string }
