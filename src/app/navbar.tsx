@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 export default function Navbar() {
     return (
-        <nav className="bg-blue-600 text-white shadow">
+        <nav className="fixed top-0 left-0 w-full bg-blue-600 text-white shadow z-50">
             <div className="container mx-auto px-4 py-4 flex items-center">
                 {/* Logo */}
                 <a href="#" className="text-xl font-bold flex-shrink-0">Squiz App</a>

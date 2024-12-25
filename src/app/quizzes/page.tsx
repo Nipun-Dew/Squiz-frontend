@@ -2,6 +2,7 @@
 import Navbar from "@/app/navbar";
 import QuizCard from "@/app/quizzes/quizCard";
 import {useEffect, useState} from "react";
+import {useRouter} from "next/navigation";
 
 interface QuizzesData {
     id: number,
@@ -16,7 +17,7 @@ interface QuizzesData {
 
 export default function Quizzes() {
     const [data, setData] = useState<QuizzesData[] | null>(null);
-
+    const router = useRouter();
     const quizDataUrl = "/api/squiz/v1/quizzes"
 
     const fetchData = async () => {
@@ -25,7 +26,7 @@ export default function Quizzes() {
         const headers = {
             Authorization: token ? `Bearer ${token}` : "",
         };
-        const response = await fetch(quizDataUrl, { headers: headers });
+        const response = await fetch(quizDataUrl, {headers: headers});
 
         // TODO add proper error handling logic
         if (!response.ok) {
@@ -43,13 +44,16 @@ export default function Quizzes() {
     return (
         <div className="min-h-screen flex flex-col bg-gray-200">
             <Navbar/>
-                <button
-                    className="absolute top-0 right-0 mt-28 mr-16 text-xl py-3 px-6 bg-blue-500 text-center text-white font-bold rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                    + Add
-                </button>
-            <div className="bg-gray-200 flex flex-col items-center justify-center min-h-screen">
-                <h1 className="text-4xl font-bold mb-6">Your Quizzes</h1>
+            <button
+                className="absolute top-0 right-0 mt-28 mr-16 text-xl py-3 px-6 bg-blue-500 text-center text-white font-bold rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                onClick={() => {
+                    router.push('/quizzes/add');
+                }}
+            >
+                + Add
+            </button>
+            <div className="bg-gray-200 mt-28 mb-12 flex flex-col items-center justify-center min-h-screen">
+                <h1 className="text-4xl font-bold mb-12">Your Quizzes</h1>
                 <div className="flex flex-wrap justify-center gap-6">
                     {data?.map((quiz) => (
                         <QuizCard

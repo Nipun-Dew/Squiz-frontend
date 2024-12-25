@@ -1,5 +1,5 @@
 "use client"
-import Navbar from "@/app/navbar";
+import Navbar from "../../navbar";
 import {useEffect, useState} from "react";
 
 interface Quiz {
@@ -70,19 +70,19 @@ export default function QuizClient({id}: { id: string }) {
     return (
         <>
             <Navbar/>
-            <div className="flex flex-col gap-8 p-8 items-center">
+            <div className="mt-24 flex flex-col gap-8 p-8 items-center">
                 <h1 className="text-4xl font-bold mb-6">{data?.quiz?.title}</h1>
-                {data?.questions?.map((data, index) => (
+                {data?.questions?.map((data, idx) => (
                     <div
-                        key={data.question.id}
+                        key={idx}
                         className="bg-white rounded-lg shadow-md m-1 p-6 w-[800px] h-auto flex flex-col"
                     >
-                        <h2 className="text-lg font-bold text-gray-800 mb-2">{data.question.question}</h2>
+                        <h2 className="text-lg font-bold text-gray-800 mb-2">{`${data.question.questionNumber} ${data.question.question}`}</h2>
                         <ul className="space-y-1">
                             {data?.answers?.map((answer, idx) => (
                                 <li
                                     key={idx}
-                                    className="text-gray-600 text-sm leading-relaxed list-disc list-inside"
+                                    className="text-gray-600 ml-8 mt-3 text-sm leading-relaxed list-decimal list-inside"
                                 >
                                     {answer.choiceText}
                                 </li>
