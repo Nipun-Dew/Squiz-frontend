@@ -60,13 +60,13 @@ export default function EditQuizClient({id}: { id: string }) {
     startAutoLogout(token);
 
     const handleQuestionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = question;
+        const value = {...question};
         value.question = e.target.value;
         setQuestion(value);
     };
 
     const handleQuestionNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = question;
+        const value = {...question};
         value.questionNumber = e.target.value;
         setQuestion(value);
     };
