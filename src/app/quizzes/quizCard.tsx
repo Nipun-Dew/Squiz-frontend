@@ -23,8 +23,8 @@ const QuizCard: React.FC<QuizCardProps> = ({id, title, description}) => {
             onClick={() => navigateToDynamicRoute()}
         >
             <div className="p-4">
-                <h2 className="text-lg font-semibold text-gray-800">{"Quiz no: " + id}</h2>
-                <h3 className="text-lg font-semibold text-gray-800">{title}</h3>
+                <h2 className="text-lg font-bold mb-2 text-gray-800">{title}</h2>
+                <div className="border-b border-gray-200 mb-4"></div>
                 <p className="text-gray-600 mt-2">{description}</p>
 
                 <div className="mt-4 flex justify-end">
