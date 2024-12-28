@@ -166,7 +166,7 @@ export default function EditQuizClient({id}: { id: string }) {
 
     return (
         <>
-            <Navbar/>
+            <Navbar id={"quizzes"}/>
             <div className="bg-gray-200 mt-24 flex flex-col items-center justify-center min-h-screen">
                 <form
                     onSubmit={handleSubmit}

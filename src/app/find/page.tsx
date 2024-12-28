@@ -81,7 +81,7 @@ export default function Find() {
 
     return (
         <div className="min-h-screen flex flex-col bg-gray-200">
-            <Navbar/>
+            <Navbar id={"find"}/>
             <div className="bg-gray-200 flex flex-col items-center justify-center min-h-screen">
                 <div
                     className="flex items-center mb-24 bg-gray-100 w-full max-w-md mx-auto border rounded-lg overflow-hidden shadow-md">

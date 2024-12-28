@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-export default function Navbar() {
+export default function Navbar({id}: { id: string }) {
     return (
         <nav className="fixed top-0 left-0 w-full bg-blue-600 text-white shadow z-50">
             <div className="container mx-auto px-4 py-4 flex items-center">
@@ -10,12 +10,14 @@ export default function Navbar() {
                 {/* Navigation Links */}
                 <ul className="flex space-x-14 justify-center flex-grow">
                     <li>
-                        <Link href="/quizzes" className="hover:text-blue-200">
+                        <Link href="/quizzes" className={`hover:text-blue-200 
+                        ${id === "quizzes" ? "text-xl font-bold" : ""}`}>
                             Quizzes
                         </Link>
                     </li>
                     <li>
-                        <Link href="/find" className="hover:text-blue-200">
+                        <Link href="/find" className={`hover:text-blue-200 
+                        ${id === "find" ? "text-xl font-bold" : ""}`}>
                             Find
                         </Link>
                     </li>

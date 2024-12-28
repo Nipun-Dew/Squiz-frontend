@@ -72,7 +72,7 @@ export default function QuizClient({id}: { id: string }) {
 
     return (
         <>
-            <Navbar/>
+            <Navbar id={"quizzes"}/>
             <div className="mt-24 flex flex-col gap-8 p-8 items-center">
                 <h1 className="text-4xl font-bold mb-6">{data?.quiz?.title}</h1>
                 {data?.questions?.map((data, idx) => (

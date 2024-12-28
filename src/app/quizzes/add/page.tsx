@@ -60,7 +60,7 @@ export default function AddQuiz() {
 
     return (
         <div className="min-h-screen flex flex-col bg-gray-200">
-            <Navbar/>
+            <Navbar id={"quizzes"}/>
             <div className="bg-gray-200 flex flex-col items-center justify-center min-h-screen">
                 <form
                     onSubmit={handleSubmit}

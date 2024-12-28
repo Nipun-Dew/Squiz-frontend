@@ -45,7 +45,7 @@ export default function Quizzes() {
 
     return (
         <div className="min-h-screen flex flex-col bg-gray-200">
-            <Navbar/>
+            <Navbar id={"quizzes"}/>
             <button
                 className="absolute top-0 right-0 mt-28 mr-16 text-xl py-3 px-6 bg-blue-500 text-center text-white font-bold rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 onClick={() => {
