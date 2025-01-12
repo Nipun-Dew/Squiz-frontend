@@ -39,6 +39,27 @@ export default function Quizzes() {
         return result;
     }
 
+    const publishQuiz = async (id: string) => {
+        const publishUrl = `/api/squiz/v1/quiz/publish`
+
+        const response = await fetch(publishUrl, {
+            method: "POST",
+            headers: {
+                'Authorization': token ? `Bearer ${token}` : "",
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                quizId: id
+            }),
+        });
+
+        if (!response.ok) {
+            window.alert('Failed to publish quiz!');
+        } else {
+            fetchData().then(data => setData(data));
+        }
+    }
+
     useEffect(() => {
         fetchData().then(data => setData(data));
     }, [])
@@ -64,7 +85,10 @@ export default function Quizzes() {
                             id={quiz.id.toString()}
                             identifier={quiz.quizIdentifier}
                             title={quiz.title}
-                            description={quiz.description}/>
+                            state={quiz.state}
+                            description={quiz.description}
+                            publishQuiz={publishQuiz}
+                        />
                     ))}
                 </div>
             </div>

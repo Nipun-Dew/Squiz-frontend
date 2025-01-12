@@ -1,7 +1,8 @@
 "use client"
 import Navbar from "../../navbar";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import startAutoLogout from "@/app/login/logout";
+import {CheckCircleIcon} from "@heroicons/react/24/solid";
 
 interface Quiz {
     id: number,
@@ -22,7 +23,7 @@ interface Question {
     question: string,
     imageUrl: string,
     imageName: string | null,
-    correctAnswer: boolean
+    allocatedTime: number
 }
 
 interface Choice {
@@ -33,7 +34,7 @@ interface Choice {
     helperText: string,
     imageUrl: string,
     imageName: string,
-    allocatedTime: number
+    correctAnswer: boolean
 }
 
 interface QuestionData {
@@ -80,15 +81,21 @@ export default function QuizClient({id}: { id: string }) {
                         key={idx}
                         className="bg-white rounded-lg shadow-md m-1 p-6 w-[800px] h-auto flex flex-col"
                     >
-                        <h2 className="text-lg font-bold text-gray-800 mb-2">{`${data.question.questionNumber} ${data.question.question}`}</h2>
+                        <h2 className="text-lg font-bold text-gray-800 mb-2">{data.question.question}</h2>
+                        <h4 className="text-sm font-bold text-gray-800 mb-2">{`Question number: ${data.question.questionNumber}`}</h4>
                         <ul className="space-y-1">
                             {data?.choices?.map((answer, idx) => (
-                                <li
-                                    key={idx}
-                                    className="text-gray-600 ml-8 mt-3 text-sm leading-relaxed list-decimal list-inside"
-                                >
-                                    {answer.choiceText}
-                                </li>
+                                <div key={idx} className="flex items-center">
+                                    <li
+                                        key={idx}
+                                        className="text-gray-600 ml-8 mt-3 text-sm leading-relaxed list-decimal list-inside"
+                                    >
+                                        {answer.choiceText}
+                                    </li>
+                                    {answer.correctAnswer ? <CheckCircleIcon
+                                        className="h-6 w-6 mt-3 ml-5 text-green-500"
+                                    /> : <></>}
+                                </div>
                             ))}
                         </ul>
                     </div>

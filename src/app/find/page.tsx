@@ -20,9 +20,22 @@ interface QuizData {
     dueDate: string,
 }
 
+interface Session {
+    id: number,
+    quizId: number,
+    quizIdentifier: string,
+    userId: string,
+    startTime: string,
+    submitTime: string,
+    endTime: string,
+    duration: number,
+    completed: boolean
+}
+
 export default function Find() {
     const [searchInput, setSearchInput] = useState("");
     const [quizInfo, setQuizInfo] = useState<QuizData | null>(null);
+    const [isCompletedSession, setIsCompletedSession] = useState(false);
 
     const router = useRouter();
 
@@ -31,27 +44,37 @@ export default function Find() {
 
     const handleSearch = async () => {
         const response = await findQuiz({identifier: searchInput});
-        const quizData: QuizData = await response.json();
+        const responseData = await response.clone().text();
 
-        if (response.ok) {
-            setQuizInfo(quizData)
+        const quizData: QuizData = (!responseData || responseData.trim() === '') ? null : await response.json();
+
+        if (response.ok && quizData !== null) {
+            setQuizInfo(quizData);
+            const sessionResponse = await findSession(quizData.id.toString());
+            const resultText = await sessionResponse.clone().text();
+
+            const sessionData: Session = (!resultText || resultText.trim() === '') ? null : await sessionResponse.json();
+            setIsCompletedSession(sessionData?.completed);
+
         } else {
-            window.alert('Failed to find the quiz!');
+            setQuizInfo(null)
+            window.alert('Failed to load quiz!');
         }
     };
 
     const startQuiz = async (id: string) => {
         const result = await findSession(id);
-        if (!result || result.trim() === '') {
+        const resultText = await result.text();
+        if (!resultText || resultText.trim() === '') {
             await addSession(parseInt(id))
         }
         router.push(`/quiz/${id}`);
     }
 
     const addSession = async (id: number) => {
-        const findQuizUrl = `/api/squiz/v1/session`
+        const findSessionUrl = `/api/squiz/v1/session`
 
-        return await fetch(findQuizUrl, {
+        return await fetch(findSessionUrl, {
             method: "POST",
             headers: {
                 'Authorization': token ? `Bearer ${token}` : "",
@@ -74,7 +97,7 @@ export default function Find() {
         if (!response.ok) {
             window.alert('Failed to load quizzes!');
         }
-        return await response.text();
+        return response;
     }
 
     const findQuiz = async (data: FindQuizBody) => {
@@ -136,15 +159,23 @@ export default function Find() {
                                         className="font-light text-gray-500">{quizInfo?.createdDate.slice(0, 10)}</span>
                                 </div>
                                 <button
-                                    className="mt-6 flex items-center justify-center px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none"
+                                    className={`mt-6 flex items-center justify-center px-4 py-2 
+                                    ${!isCompletedSession ? 
+                                        'bg-green-500 text-white rounded-md hover:bg-green-600' : 
+                                        'bg-gray-300 text-gray-500 rounded-md cursor-not-allowed'
+                                    } focus:outline-none`}
                                     aria-label="Play"
                                     onClick={() => {
                                         startQuiz(quizInfo?.id?.toString());
                                     }}
+                                    disabled={isCompletedSession}
                                 >
                                     <PlayIcon className="w-5 h-5 mr-2"/>
                                     Start
                                 </button>
+                                {isCompletedSession ? <p className="mt-4 text-sm text-blue-400">
+                                    Note: This quiz is attempted before, unable to start!
+                                </p> : <></>}
                             </div>
                         </div>
                     </div>

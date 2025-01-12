@@ -5,14 +5,18 @@ interface QuizCardProps {
     id: string;
     identifier: string;
     title: string;
+    state: string;
     description: string;
+    publishQuiz: (id: string) => Promise<void>;
 }
 
-const QuizCard: React.FC<QuizCardProps> = ({id, identifier, title, description}) => {
+const QuizCard: React.FC<QuizCardProps> = ({id, identifier, title, state, description, publishQuiz}) => {
     const router = useRouter();
     const navigateToDynamicRoute = () => {
         router.push(`quizzes/${id.toString()}`);
     };
+
+    const isPublished = state === 'PUBLISHED';
 
     const navigateToDynamicEditRoute = () => {
         router.push(`quizzes/edit/${id.toString()}`);
@@ -39,16 +43,17 @@ const QuizCard: React.FC<QuizCardProps> = ({id, identifier, title, description})
                         <LinkIcon className="h-5 w-5 text-orange-400 transition duration-300"/>
                         <span className="text-sm text-orange-400">Copy</span>
                     </button>
-                    <button
+                    {!isPublished ? <button
                         onClick={(e) => {
                             e.stopPropagation(); // Prevent the click event from navigating to the dynamic route
+                            publishQuiz(id);
                         }}
                         className="flex items-center space-x-2 p-2 transition duration-300 hover:bg-green-100 hover:text-white rounded-xl"
                     >
                         <PaperAirplaneIcon className="h-5 w-5 text-green-600 transition duration-300"/>
                         <span className="text-sm text-green-600">Publish</span>
-                    </button>
-                    <button
+                    </button> : <></>}
+                    {!isPublished ? <button
                         onClick={(e) => {
                             e.stopPropagation(); // Prevent the click event from navigating to the dynamic route
                             navigateToDynamicEditRoute();
@@ -57,7 +62,7 @@ const QuizCard: React.FC<QuizCardProps> = ({id, identifier, title, description})
                     >
                         <PencilIcon className="h-5 w-5 text-blue-600 transition duration-300"/>
                         <span className="text-sm text-blue-600">Edit</span>
-                    </button>
+                    </button> : <></>}
                 </div>
             </div>
         </div>

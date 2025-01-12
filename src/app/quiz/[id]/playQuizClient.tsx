@@ -100,8 +100,27 @@ export default function PlayQuizClient({id}: { id: string }) {
         setSelectedAnswer(number);
     }
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
+        await submitAnswers(sessionData?.id.toString() || "0");
         router.push(`/quiz/${id}/results`);
+    }
+
+    const submitAnswers = async (sessionId: string) => {
+        const postQuizUrl = `/api/squiz/v1/session/submit`
+
+        const response = await fetch(postQuizUrl, {
+            method: "POST",
+            headers: {
+                'Authorization': token ? `Bearer ${token}` : "",
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({sessionId: sessionId}),
+        });
+
+        // TODO add proper error handling logic
+        if (!response.ok) {
+            window.alert('Failed submit the quiz!');
+        }
     }
 
     const handleSaveAnswer = async (choiceId: number) => {
@@ -131,7 +150,7 @@ export default function PlayQuizClient({id}: { id: string }) {
 
         // TODO add proper error handling logic
         if (!response.ok) {
-            window.alert('Failed to load questions of the quiz!');
+            window.alert('Failed to save the answer!');
         }
     }
 

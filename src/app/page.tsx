@@ -1,6 +1,18 @@
+"use client"
 import Link from "next/link";
+import {useRouter} from "next/navigation";
+import {useEffect} from "react";
 
 export default function Home() {
+    const router = useRouter();
+    const token = sessionStorage.getItem("authToken") || null;
+
+    useEffect(() => {
+        if (!!token) {
+            router.push("/quizzes");
+        }
+    }, [token]);
+
     return (
         <div className="bg-gray-200 flex flex-col items-center justify-center min-h-screen p-6">
             <h1 className="text-4xl font-bold mb-6">Welcome to Squiz App</h1>

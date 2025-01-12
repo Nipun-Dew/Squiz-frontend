@@ -2,6 +2,7 @@
 import React, {useEffect, useState} from "react";
 import Navbar from "@/app/navbar";
 import startAutoLogout from "@/app/login/logout";
+import {CheckCircleIcon} from "@heroicons/react/24/solid";
 
 interface Question {
     quizId: string,
@@ -253,14 +254,20 @@ export default function EditQuizClient({id}: { id: string }) {
                         className="bg-white rounded-lg shadow-md mb-6 p-6 w-[580px] h-auto flex flex-col"
                     >
                         <h2 className="text-lg font-bold text-gray-800 mb-2">{questionInfo?.question?.question}</h2>
+                        <h2 className="text-sm font-bold text-gray-800 mb-2">{`Question number: ${questionInfo?.question?.questionNumber}`}</h2>
                         <ul className="space-y-1">
                             {questionInfo?.choices?.map((option, idx) => (
-                                <li
-                                    key={idx}
-                                    className="text-gray-600 ml-8 mt-3 text-sm leading-relaxed list-decimal list-inside"
-                                >
-                                    {option?.choiceText}
-                                </li>
+                                <div key={idx} className="flex items-center">
+                                    <li
+                                        key={idx}
+                                        className="text-gray-600 ml-8 mt-3 text-sm leading-relaxed list-decimal list-inside"
+                                    >
+                                        {option?.choiceText}
+                                    </li>
+                                    {option?.correctAnswer ? <CheckCircleIcon
+                                        className="h-6 w-6 mt-3 ml-5 text-green-500"
+                                    /> : <></>}
+                                </div>
                             ))}
                         </ul>
                     </div>
