@@ -22,7 +22,7 @@ interface Option {
 
 interface QuestionInfo {
     question: Question,
-    answers: Option[],
+    choices: Option[],
 }
 
 interface Quiz {
@@ -137,7 +137,7 @@ export default function EditQuizClient({id}: { id: string }) {
             const updatedQuestion = savedQuestions;
             updatedQuestion.push({
                 question: question,
-                answers: options,
+                choices: options,
             });
             setSavedQuestions(updatedQuestion);
         } else {
@@ -254,7 +254,7 @@ export default function EditQuizClient({id}: { id: string }) {
                     >
                         <h2 className="text-lg font-bold text-gray-800 mb-2">{questionInfo?.question?.question}</h2>
                         <ul className="space-y-1">
-                            {questionInfo?.answers?.map((option, idx) => (
+                            {questionInfo?.choices?.map((option, idx) => (
                                 <li
                                     key={idx}
                                     className="text-gray-600 ml-8 mt-3 text-sm leading-relaxed list-decimal list-inside"

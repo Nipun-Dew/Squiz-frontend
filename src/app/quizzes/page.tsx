@@ -8,6 +8,7 @@ import startAutoLogout from "@/app/login/logout";
 interface QuizzesData {
     id: number,
     creatorId: string,
+    quizIdentifier: string,
     title: string,
     description: string,
     createdDate: string,
@@ -61,6 +62,7 @@ export default function Quizzes() {
                         <QuizCard
                             key={quiz.id}
                             id={quiz.id.toString()}
+                            identifier={quiz.quizIdentifier}
                             title={quiz.title}
                             description={quiz.description}/>
                     ))}

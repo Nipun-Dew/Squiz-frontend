@@ -25,7 +25,7 @@ interface Question {
     correctAnswer: boolean
 }
 
-interface Answer {
+interface Choice {
     id: number,
     questionId: string,
     choiceNumber: string,
@@ -38,7 +38,7 @@ interface Answer {
 
 interface QuestionData {
     question: Question,
-    answers: Answer[]
+    choices: Choice[]
 }
 
 interface QuizData {
@@ -82,7 +82,7 @@ export default function QuizClient({id}: { id: string }) {
                     >
                         <h2 className="text-lg font-bold text-gray-800 mb-2">{`${data.question.questionNumber} ${data.question.question}`}</h2>
                         <ul className="space-y-1">
-                            {data?.answers?.map((answer, idx) => (
+                            {data?.choices?.map((answer, idx) => (
                                 <li
                                     key={idx}
                                     className="text-gray-600 ml-8 mt-3 text-sm leading-relaxed list-decimal list-inside"

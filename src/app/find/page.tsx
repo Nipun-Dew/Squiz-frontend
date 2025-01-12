@@ -3,6 +3,7 @@ import Navbar from "@/app/navbar";
 import {MagnifyingGlassIcon, PlayIcon} from "@heroicons/react/24/solid"
 import {useState} from "react";
 import startAutoLogout from "@/app/login/logout";
+import {useRouter} from "next/navigation";
 
 interface FindQuizBody {
     identifier: string
@@ -19,14 +20,11 @@ interface QuizData {
     dueDate: string,
 }
 
-interface CardData {
-    title: string;
-    details: { label: string; value: string }[];
-}
-
 export default function Find() {
     const [searchInput, setSearchInput] = useState("");
     const [quizInfo, setQuizInfo] = useState<QuizData | null>(null);
+
+    const router = useRouter();
 
     const token = sessionStorage.getItem("authToken") || "";
     startAutoLogout(token);
@@ -42,6 +40,43 @@ export default function Find() {
         }
     };
 
+    const startQuiz = async (id: string) => {
+        const result = await findSession(id);
+        if (!result || result.trim() === '') {
+            await addSession(parseInt(id))
+        }
+        router.push(`/quiz/${id}`);
+    }
+
+    const addSession = async (id: number) => {
+        const findQuizUrl = `/api/squiz/v1/session`
+
+        return await fetch(findQuizUrl, {
+            method: "POST",
+            headers: {
+                'Authorization': token ? `Bearer ${token}` : "",
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({"quizId": id}),
+        });
+    }
+
+    const findSession = async (id: string) => {
+        const findSessionUrl = `/api/squiz/v1/session/user/quiz/${id}`
+
+        const headers = {
+            Authorization: token ? `Bearer ${token}` : "",
+        };
+
+        const response = await fetch(findSessionUrl, {headers: headers});
+
+        // TODO add proper error handling logic
+        if (!response.ok) {
+            window.alert('Failed to load quizzes!');
+        }
+        return await response.text();
+    }
+
     const findQuiz = async (data: FindQuizBody) => {
         const findQuizUrl = `/api/squiz/v1/quiz/play`
 
@@ -54,30 +89,6 @@ export default function Find() {
             body: JSON.stringify(data),
         });
     }
-
-    const results: CardData[] = [
-        {
-            title: "Result 1",
-            details: [
-                {label: "Author", value: "John Doe"},
-                {label: "Year", value: "2023"},
-            ],
-        },
-        {
-            title: "Result 2",
-            details: [
-                {label: "Author", value: "Jane Smith"},
-                {label: "Year", value: "2022"},
-            ],
-        },
-        {
-            title: "Result 3",
-            details: [
-                {label: "Author", value: "Sam Wilson"},
-                {label: "Year", value: "2021"},
-            ],
-        },
-    ];
 
     return (
         <div className="min-h-screen flex flex-col bg-gray-200">
@@ -127,9 +138,12 @@ export default function Find() {
                                 <button
                                     className="mt-6 flex items-center justify-center px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none"
                                     aria-label="Play"
+                                    onClick={() => {
+                                        startQuiz(quizInfo?.id?.toString());
+                                    }}
                                 >
                                     <PlayIcon className="w-5 h-5 mr-2"/>
-                                    Play
+                                    Start
                                 </button>
                             </div>
                         </div>
