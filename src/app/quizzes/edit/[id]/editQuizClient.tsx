@@ -207,10 +207,12 @@ export default function EditQuizClient({id}: { id: string }) {
                             <button
                                 type="button"
                                 onClick={() => addCorrectFlag(index)}
-                                className={`ml-2 p-1 transition font-light duration-200 hover:bg-green-100 text-gray-400 
+                                className={`ml-2 p-1 transition font-light duration-200 hover:bg-gray-100 text-gray-400 
                                 rounded-lg text-white-100 ${option.correctAnswer ? "bg-green-100" : ""}`}
                             >
-                                correct
+                                <CheckCircleIcon
+                                    className={`h-6 w-6 ${option.correctAnswer ? 'text-green-500' : 'text-gray-400'}`}
+                                />
                             </button>
                             <input
                                 type="text"

@@ -7,6 +7,7 @@ export default function Home() {
     const router = useRouter();
     const token = sessionStorage.getItem("authToken") || null;
 
+    // If token is present, redirect to user's quizzes page
     useEffect(() => {
         if (!!token) {
             router.push("/quizzes");

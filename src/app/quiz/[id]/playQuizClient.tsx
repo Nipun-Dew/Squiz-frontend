@@ -100,6 +100,10 @@ export default function PlayQuizClient({id}: { id: string }) {
         setSelectedAnswer(number);
     }
 
+    const handleExit = () => {
+        router.push("/find");
+    }
+
     const handleSubmit = async () => {
         await submitAnswers(sessionData?.id.toString() || "0");
         router.push(`/quiz/${id}/results`);
@@ -279,7 +283,7 @@ export default function PlayQuizClient({id}: { id: string }) {
                 {/* Bottom Buttons */}
                 <div className="p-4 bg-white border-t border-gray-300 flex justify-end space-x-4 sticky bottom-0">
                     <button
-                        // onClick={handleExit}
+                        onClick={handleExit}
                         className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
                     >
                         Exit
