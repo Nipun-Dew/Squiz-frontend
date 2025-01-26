@@ -30,12 +30,13 @@ export default function Quizzes() {
             Authorization: token ? `Bearer ${token}` : "",
         };
         const response = await fetch(quizDataUrl, {headers: headers});
+        const responseData = await response.clone().text();
 
         // TODO add proper error handling logic
         if (!response.ok) {
             window.alert('Failed to load quizzes!');
         }
-        const result: QuizzesData[] = await response.json();
+        const result: QuizzesData[] = (!responseData || responseData.trim() === '') ? null : await response.json();
         return result;
     }
 

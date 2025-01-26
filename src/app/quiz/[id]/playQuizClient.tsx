@@ -190,6 +190,15 @@ export default function PlayQuizClient({id}: { id: string }) {
 
         const result: Session = await response.json();
         setSessionData(result);
+
+        return result;
+    }
+
+    const validateSession = async (session: Session) => {
+        if (session.completed) {
+            window.alert('This Quiz is completed by the user!');
+            router.push("/find");
+        }
     }
 
     const fetchQuestionsMetadata = async () => {
@@ -207,13 +216,22 @@ export default function PlayQuizClient({id}: { id: string }) {
         return result;
     }
 
+    const handleInitialState = async () => {
+        try {
+            const session = await fetchSessionData();
+            await validateSession(session);
+            const metaData = await fetchQuestionsMetadata();
+            setSelectedNumber(metaData?.questionsMetadata[0]?.questionId);
+            await fetchQuestionData(metaData?.questionsMetadata[0]?.questionId?.toString() || "0",
+                session?.id.toString() || "0");
+        } catch (error) {
+            router.push("/find");
+            window.alert('Error occurred with the session!');
+        }
+    }
+
     useEffect(() => {
-        fetchSessionData();
-        fetchQuestionsMetadata().then((result) => {
-            setSelectedNumber(result?.questionsMetadata[0]?.questionId);
-            fetchQuestionData(result?.questionsMetadata[0]?.questionId?.toString() || "0",
-                sessionData?.id.toString() || "0");
-        });
+        handleInitialState();
     }, []);
 
     return (
