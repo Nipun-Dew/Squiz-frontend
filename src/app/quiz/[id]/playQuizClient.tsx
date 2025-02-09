@@ -91,9 +91,9 @@ export default function PlayQuizClient({id}: { id: string }) {
 
     const router = useRouter();
 
-    const handleIndexClick = (number: number) => {
+    const loadQuestion = (number: number) => {
         setSelectedNumber(number);
-        fetchQuestionData(number.toString(), sessionData?.id.toString() || "0");
+        fetchQuestionData(number.toString(), sessionData?.id.toString() ?? "0");
     };
 
     const handleSelectAnswer = (number: number) => {
@@ -106,7 +106,7 @@ export default function PlayQuizClient({id}: { id: string }) {
 
     const handleSubmit = async () => {
         await submitAnswers(sessionData?.id.toString() || "0");
-        router.push(`/quiz/${id}/results`);
+        router.push(`/quiz/${id}/results?session=${sessionData?.id.toString()}`);
     }
 
     const submitAnswers = async (sessionId: string) => {
@@ -156,6 +156,11 @@ export default function PlayQuizClient({id}: { id: string }) {
         if (!response.ok) {
             window.alert('Failed to save the answer!');
         }
+
+        const indexOfCurrentQuestion = questionMetadata?.questionsMetadata?.findIndex(metadata => metadata.questionId === questionData?.question.id);
+        const indexOfNextQuestion = questionMetadata?.questionsMetadata?.length === (indexOfCurrentQuestion ?? 0) + 1 ? 0 : (indexOfCurrentQuestion ?? 0)+ 1;
+
+        loadQuestion(questionMetadata?.questionsMetadata[indexOfNextQuestion]?.questionId ?? 0);
     }
 
     const fetchQuestionData = async (questionId: string, sessionId: string) => {
@@ -247,7 +252,7 @@ export default function PlayQuizClient({id}: { id: string }) {
                                     ? "bg-blue-600 text-white"
                                     : "bg-white text-gray-800 hover:bg-blue-100"
                             }`}
-                            onClick={() => handleIndexClick(question.questionId)}
+                            onClick={() => loadQuestion(question.questionId)}
                         >
                             {question.questionNumber}
                         </li>
@@ -286,7 +291,8 @@ export default function PlayQuizClient({id}: { id: string }) {
                             })}
                             <button
                                 onClick={() => handleSaveAnswer(selectedAnswer)}
-                                className="px-4 py-2 ml-4 mt-12 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                                className="px-4 py-2 ml-4 mt-12 bg-blue-500 active:bg-blue-800 text-white rounded-lg
+                                transition duration-200"
                             >
                                 Save
                             </button>

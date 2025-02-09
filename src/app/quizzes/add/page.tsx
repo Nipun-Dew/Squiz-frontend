@@ -35,7 +35,7 @@ export default function AddQuiz() {
             title: title,
             description: description,
             timeDuration: time,
-            state: "Init",
+            state: "INIT",
             dueDate: `${date}T00:00:00`,
         }).then(() => router.push('/quizzes'))
     };
