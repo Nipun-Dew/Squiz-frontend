@@ -51,9 +51,8 @@ export default function Find() {
         if (response.ok && quizData !== null) {
             setQuizInfo(quizData);
             const sessionResponse = await findSession(quizData.id.toString());
-            const resultText = await sessionResponse.clone().text();
 
-            const sessionData: Session = (!resultText || resultText.trim() === '') ? null : await sessionResponse.json();
+            const sessionData: Session = (!sessionResponse.ok) ? null : await sessionResponse.json();
             setIsCompletedSession(sessionData?.completed);
 
         } else {
@@ -64,17 +63,17 @@ export default function Find() {
 
     const startQuiz = async (id: string) => {
         const result = await findSession(id);
-        const resultText = await result.text();
-        if (!resultText || resultText.trim() === '') {
+        console.log(result);
+        if (result.statusText === 'Not Found') {
             await addSession(parseInt(id))
         }
         router.push(`/quiz/${id}`);
     }
 
     const addSession = async (id: number) => {
-        const findSessionUrl = `/api/squiz/v1/session`
+        const createSessionUrl = `/api/squiz/v1/session`
 
-        return await fetch(findSessionUrl, {
+        return await fetch(createSessionUrl, {
             method: "POST",
             headers: {
                 'Authorization': token ? `Bearer ${token}` : "",
@@ -94,9 +93,9 @@ export default function Find() {
         const response = await fetch(findSessionUrl, {headers: headers});
 
         // TODO add proper error handling logic
-        if (!response.ok) {
-            window.alert('Failed to load quizzes!');
-        }
+        // if (!response.ok) {
+        //     window.alert('Failed to load quizzes!');
+        // }
         return response;
     }
 
